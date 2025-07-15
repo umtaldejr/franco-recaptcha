@@ -1,339 +1,1092 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<html class="" lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificação de Identidade</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .verification-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 500px;
-        }
-        
-        .person-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin: 0 auto 2rem;
-            display: block;
-        }
-        
-        .question-section {
-            text-align: center;
-            margin: 2rem 0;
-        }
-        
-        .question-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-        
-        .btn-option {
-            margin: 0.5rem;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            min-width: 120px;
-        }
-        
-        .btn-yes {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-        }
-        
-        .btn-yes:hover {
-            background: linear-gradient(45deg, #20c997, #28a745);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
-        }
-        
-        .btn-no {
-            background: linear-gradient(45deg, #dc3545, #e83e8c);
-            color: white;
-        }
-        
-        .btn-no:hover {
-            background: linear-gradient(45deg, #e83e8c, #dc3545);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
-        }
-        
-        .recaptcha-container {
-            display: flex;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(45deg, #007bff, #6610f2);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        
-        .submit-btn:hover:not(:disabled) {
-            background: linear-gradient(45deg, #6610f2, #007bff);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.4);
-        }
-        
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .selected {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .header-title {
-            text-align: center;
-            color: #333;
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-        
-        .loading {
-            display: none;
-        }
-        
-        .loading.show {
-            display: inline-block;
-        }
-        
-        @media (max-width: 768px) {
-            .verification-card {
-                margin: 1rem;
-                padding: 1.5rem;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação de Identidade - Agendar Encontro</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    window.FontAwesomeConfig = {
+      autoReplaceSvg: 'nest', // Opções: 'nest', 'remove', 'replace'
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
+  <style>
+    * {
+      font-family: "Inter", sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+
+  <style>
+    .highlighted-section {
+      outline: 2px solid #3F20FB;
+      background-color: rgba(63, 32, 251, 0.1);
+    }
+
+    .edit-button {
+      position: absolute;
+      z-index: 1000;
+    }
+  </style>
+
+
+  <style>
+    :root {
+      /* Cores base */
+      --color-base: #ffffff;
+      --color-base-50: #f9fafb;
+      --color-base-100: #f3f4f6;
+      --color-base-200: #e5e7eb;
+      --color-base-300: #d1d5db;
+      --color-base-400: #9ca3af;
+      --color-base-500: #6b7280;
+      --color-base-600: #4b5563;
+      --color-base-700: #374151;
+      --color-base-800: #1f2937;
+      --color-base-900: #111827;
+      --color-base-content: #1f2937;
+
+      /* Cores primárias */
+      --color-primary: #3b82f6;
+      --color-primary-50: #eff6ff;
+      --color-primary-100: #dbeafe;
+      --color-primary-200: #bfdbfe;
+      --color-primary-300: #93c5fd;
+      --color-primary-400: #60a5fa;
+      --color-primary-500: #3b82f6;
+      --color-primary-600: #2563eb;
+      --color-primary-700: #1d4ed8;
+      --color-primary-800: #1e40af;
+      --color-primary-900: #1e3a8a;
+      --color-primary-focus: #2563eb;
+      --color-primary-content: #ffffff;
+
+      /* Cores secundárias */
+      --color-secondary: #8b5cf6;
+      --color-secondary-50: #f5f3ff;
+      --color-secondary-100: #ede9fe;
+      --color-secondary-200: #ddd6fe;
+      --color-secondary-300: #c4b5fd;
+      --color-secondary-400: #a78bfa;
+      --color-secondary-500: #8b5cf6;
+      --color-secondary-600: #7c3aed;
+      --color-secondary-700: #6d28d9;
+      --color-secondary-800: #5b21b6;
+      --color-secondary-900: #4c1d95;
+      --color-secondary-focus: #7c3aed;
+      --color-secondary-content: #ffffff;
+
+      /* Accent colors */
+      --color-accent: #f472b6;
+      --color-accent-50: #fdf2f8;
+      --color-accent-100: #fce7f3;
+      --color-accent-200: #fbcfe8;
+      --color-accent-300: #f9a8d4;
+      --color-accent-400: #f472b6;
+      --color-accent-500: #ec4899;
+      --color-accent-600: #db2777;
+      --color-accent-700: #be185d;
+      --color-accent-800: #9d174d;
+      --color-accent-900: #831843;
+      --color-accent-focus: #db2777;
+      --color-accent-content: #ffffff;
+
+      /* Neutral colors */
+      --color-neutral: #6b7280;
+      --color-neutral-50: #f9fafb;
+      --color-neutral-100: #f3f4f6;
+      --color-neutral-200: #e5e7eb;
+      --color-neutral-300: #d1d5db;
+      --color-neutral-400: #9ca3af;
+      --color-neutral-500: #6b7280;
+      --color-neutral-600: #4b5563;
+      --color-neutral-700: #374151;
+      --color-neutral-800: #1f2937;
+      --color-neutral-900: #111827;
+      --color-neutral-focus: #4b5563;
+      --color-neutral-content: #ffffff;
+
+      /* Info colors */
+      --color-info: #3b82f6;
+      --color-info-50: #eff6ff;
+      --color-info-100: #dbeafe;
+      --color-info-200: #bfdbfe;
+      --color-info-300: #93c5fd;
+      --color-info-400: #60a5fa;
+      --color-info-500: #3b82f6;
+      --color-info-600: #2563eb;
+      --color-info-700: #1d4ed8;
+      --color-info-800: #1e40af;
+      --color-info-900: #1e3a8a;
+      --color-info-focus: #2563eb;
+      --color-info-content: #ffffff;
+
+      /* Success colors */
+      --color-success: #10b981;
+      --color-success-50: #ecfdf5;
+      --color-success-100: #d1fae5;
+      --color-success-200: #a7f3d0;
+      --color-success-300: #6ee7b7;
+      --color-success-400: #34d399;
+      --color-success-500: #10b981;
+      --color-success-600: #059669;
+      --color-success-700: #047857;
+      --color-success-800: #065f46;
+      --color-success-900: #064e3b;
+      --color-success-focus: #059669;
+      --color-success-content: #ffffff;
+
+      /* Warning colors */
+      --color-warning: #f59e0b;
+      --color-warning-50: #fffbeb;
+      --color-warning-100: #fef3c7;
+      --color-warning-200: #fde68a;
+      --color-warning-300: #fcd34d;
+      --color-warning-400: #fbbf24;
+      --color-warning-500: #f59e0b;
+      --color-warning-600: #d97706;
+      --color-warning-700: #b45309;
+      --color-warning-800: #92400e;
+      --color-warning-900: #78350f;
+      --color-warning-focus: #d97706;
+      --color-warning-content: #ffffff;
+
+      /* Error colors */
+      --color-error: #ef4444;
+      --color-error-50: #fef2f2;
+      --color-error-100: #fee2e2;
+      --color-error-200: #fecaca;
+      --color-error-300: #fca5a5;
+      --color-error-400: #f87171;
+      --color-error-500: #ef4444;
+      --color-error-600: #dc2626;
+      --color-error-700: #b91c1c;
+      --color-error-800: #991b1b;
+      --color-error-900: #7f1d1d;
+      --color-error-focus: #dc2626;
+      --color-error-content: #ffffff;
+    }
+  </style>
+
+  <style>
+    /* Scheduling section disabled state */
+    .scheduling-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .scheduling-disabled::before {
+      content: '🔒 Complete o reCAPTCHA para habilitar o agendamento';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      font-weight: 600;
+      color: #666;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+
+
+  <style>
+    /* Dark theme */
+    .dark {
+      /* Base colors */
+      --color-base: #1f2937;
+      --color-base-50: #111827;
+      --color-base-100: #1f2937;
+      --color-base-200: #374151;
+      --color-base-300: #4b5563;
+      --color-base-400: #6b7280;
+      --color-base-500: #9ca3af;
+      --color-base-600: #d1d5db;
+      --color-base-700: #e5e7eb;
+      --color-base-800: #f3f4f6;
+      --color-base-900: #f9fafb;
+      --color-base-content: #f9fafb;
+
+      /* Cores primárias */
+      --color-primary: #60a5fa;
+      --color-primary-50: #1e3a8a;
+      --color-primary-100: #1e40af;
+      --color-primary-200: #1d4ed8;
+      --color-primary-300: #2563eb;
+      --color-primary-400: #3b82f6;
+      --color-primary-500: #60a5fa;
+      --color-primary-600: #93c5fd;
+      --color-primary-700: #bfdbfe;
+      --color-primary-800: #dbeafe;
+      --color-primary-900: #eff6ff;
+      --color-primary-focus: #3b82f6;
+      --color-primary-content: #1f2937;
+
+      /* Cores secundárias */
+      --color-secondary: #a78bfa;
+      --color-secondary-50: #4c1d95;
+      --color-secondary-100: #5b21b6;
+      --color-secondary-200: #6d28d9;
+      --color-secondary-300: #7c3aed;
+      --color-secondary-400: #8b5cf6;
+      --color-secondary-500: #a78bfa;
+      --color-secondary-600: #c4b5fd;
+      --color-secondary-700: #ddd6fe;
+      --color-secondary-800: #ede9fe;
+      --color-secondary-900: #f5f3ff;
+      --color-secondary-focus: #8b5cf6;
+      --color-secondary-content: #1f2937;
+
+      /* Accent colors */
+      --color-accent: #f472b6;
+      --color-accent-50: #831843;
+      --color-accent-100: #9d174d;
+      --color-accent-200: #be185d;
+      --color-accent-300: #db2777;
+      --color-accent-400: #ec4899;
+      --color-accent-500: #f472b6;
+      --color-accent-600: #f9a8d4;
+      --color-accent-700: #fbcfe8;
+      --color-accent-800: #fce7f3;
+      --color-accent-900: #fdf2f8;
+      --color-accent-focus: #ec4899;
+      --color-accent-content: #1f2937;
+
+      /* Neutral colors remain the same as light theme */
+
+      /* Info colors */
+      --color-info: #60a5fa;
+      --color-info-50: #1e3a8a;
+      --color-info-100: #1e40af;
+      --color-info-200: #1d4ed8;
+      --color-info-300: #2563eb;
+      --color-info-400: #3b82f6;
+      --color-info-500: #60a5fa;
+      --color-info-600: #93c5fd;
+      --color-info-700: #bfdbfe;
+      --color-info-800: #dbeafe;
+      --color-info-900: #eff6ff;
+      --color-info-focus: #3b82f6;
+      --color-info-content: #1f2937;
+
+      /* Success colors */
+      --color-success: #34d399;
+      --color-success-50: #064e3b;
+      --color-success-100: #065f46;
+      --color-success-200: #047857;
+      --color-success-300: #059669;
+      --color-success-400: #10b981;
+      --color-success-500: #34d399;
+      --color-success-600: #6ee7b7;
+      --color-success-700: #a7f3d0;
+      --color-success-800: #d1fae5;
+      --color-success-900: #ecfdf5;
+      --color-success-focus: #10b981;
+      --color-success-content: #1f2937;
+
+      /* Warning colors */
+      --color-warning: #fbbf24;
+      --color-warning-50: #78350f;
+      --color-warning-100: #92400e;
+      --color-warning-200: #b45309;
+      --color-warning-300: #d97706;
+      --color-warning-400: #f59e0b;
+      --color-warning-500: #fbbf24;
+      --color-warning-600: #fcd34d;
+      --color-warning-700: #fde68a;
+      --color-warning-800: #fef3c7;
+      --color-warning-900: #fffbeb;
+      --color-warning-focus: #f59e0b;
+      --color-warning-content: #1f2937;
+
+      /* Error colors */
+      --color-error: #f87171;
+      --color-error-50: #7f1d1d;
+      --color-error-100: #991b1b;
+      --color-error-200: #b91c1c;
+      --color-error-300: #dc2626;
+      --color-error-400: #ef4444;
+      --color-error-500: #f87171;
+      --color-error-600: #fca5a5;
+      --color-error-700: #fecaca;
+      --color-error-800: #fee2e2;
+      --color-error-900: #fef2f2;
+      --color-error-focus: #ef4444;
+      --color-error-content: #1f2937;
+    }
+  </style>
+
+
+  <script>tailwind.config = {
+      "theme": {
+        "extend": {
+          "colors": {
+            "transparent": "transparent",
+            "current": "currentColor",
+            "black": "#000000",
+            "white": "#ffffff",
+            "gray": {
+              "50": "#f9fafb",
+              "100": "#f3f4f6",
+              "200": "#e5e7eb",
+              "300": "#d1d5db",
+              "400": "#9ca3af",
+              "500": "#6b7280",
+              "600": "#4b5563",
+              "700": "#374151",
+              "800": "#1f2937",
+              "900": "#111827"
+            },
+            "red": {
+              "50": "#fef2f2",
+              "100": "#fee2e2",
+              "200": "#fecaca",
+              "300": "#fca5a5",
+              "400": "#f87171",
+              "500": "#ef4444",
+              "600": "#dc2626",
+              "700": "#b91c1c",
+              "800": "#991b1b",
+              "900": "#7f1d1d"
+            },
+            "yellow": {
+              "50": "#fffbeb",
+              "100": "#fef3c7",
+              "200": "#fde68a",
+              "300": "#fcd34d",
+              "400": "#fbbf24",
+              "500": "#f59e0b",
+              "600": "#d97706",
+              "700": "#b45309",
+              "800": "#92400e",
+              "900": "#78350f"
+            },
+            "green": {
+              "50": "#ecfdf5",
+              "100": "#d1fae5",
+              "200": "#a7f3d0",
+              "300": "#6ee7b7",
+              "400": "#34d399",
+              "500": "#10b981",
+              "600": "#059669",
+              "700": "#047857",
+              "800": "#065f46",
+              "900": "#064e3b"
+            },
+            "blue": {
+              "50": "#eff6ff",
+              "100": "#dbeafe",
+              "200": "#bfdbfe",
+              "300": "#93c5fd",
+              "400": "#60a5fa",
+              "500": "#3b82f6",
+              "600": "#2563eb",
+              "700": "#1d4ed8",
+              "800": "#1e40af",
+              "900": "#1e3a8a"
+            },
+            "indigo": {
+              "50": "#eef2ff",
+              "100": "#e0e7ff",
+              "200": "#c7d2fe",
+              "300": "#a5b4fc",
+              "400": "#818cf8",
+              "500": "#6366f1",
+              "600": "#4f46e5",
+              "700": "#4338ca",
+              "800": "#3730a3",
+              "900": "#312e81"
+            },
+            "purple": {
+              "50": "#f5f3ff",
+              "100": "#ede9fe",
+              "200": "#ddd6fe",
+              "300": "#c4b5fd",
+              "400": "#a78bfa",
+              "500": "#8b5cf6",
+              "600": "#7c3aed",
+              "700": "#6d28d9",
+              "800": "#5b21b6",
+              "900": "#4c1d95"
+            },
+            "pink": {
+              "50": "#fdf2f8",
+              "100": "#fce7f3",
+              "200": "#fbcfe8",
+              "300": "#f9a8d4",
+              "400": "#f472b6",
+              "500": "#ec4899",
+              "600": "#db2777",
+              "700": "#be185d",
+              "800": "#9d174d",
+              "900": "#831843"
+            },
+            "primary": {
+              "50": "var(--color-primary-50)",
+              "100": "var(--color-primary-100)",
+              "200": "var(--color-primary-200)",
+              "300": "var(--color-primary-300)",
+              "400": "var(--color-primary-400)",
+              "500": "var(--color-primary-500)",
+              "600": "var(--color-primary-600)",
+              "700": "var(--color-primary-700)",
+              "800": "var(--color-primary-800)",
+              "900": "var(--color-primary-900)",
+              "DEFAULT": "var(--color-primary)",
+              "focus": "var(--color-primary-focus)",
+              "content": "var(--color-primary-content)"
+            },
+            "secondary": {
+              "50": "var(--color-secondary-50)",
+              "100": "var(--color-secondary-100)",
+              "200": "var(--color-secondary-200)",
+              "300": "var(--color-secondary-300)",
+              "400": "var(--color-secondary-400)",
+              "500": "var(--color-secondary-500)",
+              "600": "var(--color-secondary-600)",
+              "700": "var(--color-secondary-700)",
+              "800": "var(--color-secondary-800)",
+              "900": "var(--color-secondary-900)",
+              "DEFAULT": "var(--color-secondary)",
+              "focus": "var(--color-secondary-focus)",
+              "content": "var(--color-secondary-content)"
+            },
+            "accent": {
+              "50": "var(--color-accent-50)",
+              "100": "var(--color-accent-100)",
+              "200": "var(--color-accent-200)",
+              "300": "var(--color-accent-300)",
+              "400": "var(--color-accent-400)",
+              "500": "var(--color-accent-500)",
+              "600": "var(--color-accent-600)",
+              "700": "var(--color-accent-700)",
+              "800": "var(--color-accent-800)",
+              "900": "var(--color-accent-900)",
+              "DEFAULT": "var(--color-accent)",
+              "focus": "var(--color-accent-focus)",
+              "content": "var(--color-accent-content)"
+            },
+            "neutral": {
+              "50": "var(--color-neutral-50)",
+              "100": "var(--color-neutral-100)",
+              "200": "var(--color-neutral-200)",
+              "300": "var(--color-neutral-300)",
+              "400": "var(--color-neutral-400)",
+              "500": "var(--color-neutral-500)",
+              "600": "var(--color-neutral-600)",
+              "700": "var(--color-neutral-700)",
+              "800": "var(--color-neutral-800)",
+              "900": "var(--color-neutral-900)",
+              "DEFAULT": "var(--color-neutral)",
+              "focus": "var(--color-neutral-focus)",
+              "content": "var(--color-neutral-content)"
+            },
+            "info": {
+              "50": "var(--color-info-50)",
+              "100": "var(--color-info-100)",
+              "200": "var(--color-info-200)",
+              "300": "var(--color-info-300)",
+              "400": "var(--color-info-400)",
+              "500": "var(--color-info-500)",
+              "600": "var(--color-info-600)",
+              "700": "var(--color-info-700)",
+              "800": "var(--color-info-800)",
+              "900": "var(--color-info-900)",
+              "DEFAULT": "var(--color-info)",
+              "focus": "var(--color-info-focus)",
+              "content": "var(--color-info-content)"
+            },
+            "success": {
+              "50": "var(--color-success-50)",
+              "100": "var(--color-success-100)",
+              "200": "var(--color-success-200)",
+              "300": "var(--color-success-300)",
+              "400": "var(--color-success-400)",
+              "500": "var(--color-success-500)",
+              "600": "var(--color-success-600)",
+              "700": "var(--color-success-700)",
+              "800": "var(--color-success-800)",
+              "900": "var(--color-success-900)",
+              "DEFAULT": "var(--color-success)",
+              "focus": "var(--color-success-focus)",
+              "content": "var(--color-success-content)"
+            },
+            "warning": {
+              "50": "var(--color-warning-50)",
+              "100": "var(--color-warning-100)",
+              "200": "var(--color-warning-200)",
+              "300": "var(--color-warning-300)",
+              "400": "var(--color-warning-400)",
+              "500": "var(--color-warning-500)",
+              "600": "var(--color-warning-600)",
+              "700": "var(--color-warning-700)",
+              "800": "var(--color-warning-800)",
+              "900": "var(--color-warning-900)",
+              "DEFAULT": "var(--color-warning)",
+              "focus": "var(--color-warning-focus)",
+              "content": "var(--color-warning-content)"
+            },
+            "error": {
+              "50": "var(--color-error-50)",
+              "100": "var(--color-error-100)",
+              "200": "var(--color-error-200)",
+              "300": "var(--color-error-300)",
+              "400": "var(--color-error-400)",
+              "500": "var(--color-error-500)",
+              "600": "var(--color-error-600)",
+              "700": "var(--color-error-700)",
+              "800": "var(--color-error-800)",
+              "900": "var(--color-error-900)",
+              "DEFAULT": "var(--color-error)",
+              "focus": "var(--color-error-focus)",
+              "content": "var(--color-error-content)"
+            },
+            "danger": {
+              "50": "var(--color-error-50)",
+              "100": "var(--color-error-100)",
+              "200": "var(--color-error-200)",
+              "300": "var(--color-error-300)",
+              "400": "var(--color-error-400)",
+              "500": "var(--color-error-500)",
+              "600": "var(--color-error-600)",
+              "700": "var(--color-error-700)",
+              "800": "var(--color-error-800)",
+              "900": "var(--color-error-900)",
+              "DEFAULT": "var(--color-error)",
+              "focus": "var(--color-error-focus)",
+              "content": "var(--color-error-content)"
+            },
+            "failure": {
+              "50": "var(--color-error-50)",
+              "100": "var(--color-error-100)",
+              "200": "var(--color-error-200)",
+              "300": "var(--color-error-300)",
+              "400": "var(--color-error-400)",
+              "500": "var(--color-error-500)",
+              "600": "var(--color-error-600)",
+              "700": "var(--color-error-700)",
+              "800": "var(--color-error-800)",
+              "900": "var(--color-error-900)",
+              "DEFAULT": "var(--color-error)",
+              "focus": "var(--color-error-focus)",
+              "content": "var(--color-error-content)"
             }
-            
-            .person-image {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .question-text {
-                font-size: 1.1rem;
-            }
-            
-            .btn-option {
-                padding: 0.6rem 1.5rem;
-                margin: 0.3rem;
-                min-width: 100px;
-            }
+          },
+          "fontFamily": {
+            "sans": [
+              "Inter",
+              "sans-serif"
+            ]
+          }
         }
-    </style>
+      },
+      "variants": {
+        "extend": {
+          "backgroundColor": [
+            "active",
+            "group-hover"
+          ],
+          "textColor": [
+            "active",
+            "group-hover"
+          ]
+        }
+      },
+      "plugins": []
+    };</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&amp;display=swap">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif !important;
+    }
+
+    /* Preserve Font Awesome icons */
+    .fa,
+    .fas,
+    .far,
+    .fal,
+    .fab {
+      font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    }
+  </style>
+  <style>
+    .highlighted-section {
+      outline: 2px solid #3F20FB;
+      background-color: rgba(63, 32, 251, 0.1);
+    }
+
+    .edit-button {
+      position: absolute;
+      z-index: 1000;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    html,
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <div class="verification-card">
-            <h1 class="header-title">
-                <i class="fas fa-user-check"></i>
-                Verificação de Identidade
-            </h1>
-            
-            <!-- Foto da pessoa -->
-            <img src="SmartSelect_20250715_125648_Tinder.jpg" 
-                 alt="Pessoa para verificação" 
-                 class="person-image" 
-                 id="personImage">
-            
-            <!-- Formulário -->
-            <form id="verificationForm">
-                <div class="question-section">
-                    <div class="question-text">
-                        Esta pessoa na foto é você?
-                    </div>
-                    
-                    <div class="d-flex justify-content-center flex-wrap">
-                        <button type="button" class="btn btn-option btn-yes" id="btnYes" onclick="selectOption('yes')">
-                            <i class="fas fa-check"></i> Sim, sou eu
-                        </button>
-                        <button type="button" class="btn btn-option btn-no" id="btnNo" onclick="selectOption('no')">
-                            <i class="fas fa-times"></i> Não, não sou eu
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- reCAPTCHA -->
-                <div class="recaptcha-container">
-                    <div class="g-recaptcha" data-sitekey="6Lf3E4QrAAAAANb7T5QsTorAQtxOBOD9XzA9WxIw"></div>
-                </div>
-                
-                <!-- Botão de envio -->
-                <button type="submit" class="submit-btn" id="submitBtn" disabled>
-                    <span class="loading" id="loadingSpinner">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </span>
-                    <span id="submitText">
-                        <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
-                    </span>
-                </button>
-            </form>
+
+<body class="h-full text-base-content">
+  <div id="date-scheduler" class="flex flex-col min-h-[700px] bg-white">
+    <!-- Header -->
+    <header id="header" class="bg-white py-4 px-[15px] border-b border-[#d3d3d3] flex justify-center items-center">
+      <h1 class="text-2xl">Agendar Encontro</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 p-[15px] flex flex-col gap-4">
+      <!-- Identity Verification Section -->
+      <section id="identity-verification" class="bg-white rounded-xl border border-[#d3d3d3] p-6">
+        <!-- Profile Photo -->
+        <div class="text-center mb-6">
+          <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-[#FF69B4] shadow-lg mb-4">
+            <img src="SmartSelect_20250715_125648_Tinder.jpg" alt="Verificação de identidade"
+              class="w-full h-full object-cover" id="personImage">
+          </div>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-2" bodyVerificação de Identidade</h2>
+            <p class="text-lg text-gray-600 mb-6">Esta pessoa na foto é você?</p>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let selectedOption = null;
-        const whatsappNumber = "5516982220820";
-        
-        function selectOption(option) {
-            selectedOption = option;
-            
-            // Remove seleção anterior
-            document.getElementById('btnYes').classList.remove('selected');
-            document.getElementById('btnNo').classList.remove('selected');
-            
-            // Adiciona seleção atual
-            if (option === 'yes') {
-                document.getElementById('btnYes').classList.add('selected');
-            } else {
-                document.getElementById('btnNo').classList.add('selected');
-            }
-            
-            // Verifica se pode habilitar o botão de envio
-            checkFormValidity();
-        }
-        
-        function checkFormValidity() {
-            const recaptchaResponse = grecaptcha.getResponse();
-            const submitBtn = document.getElementById('submitBtn');
-            
-            if (selectedOption && recaptchaResponse) {
-                submitBtn.disabled = false;
-            } else {
-                submitBtn.disabled = true;
-            }
-        }
-        
-        // Callback do reCAPTCHA
-        function recaptchaCallback() {
-            checkFormValidity();
-        }
-        
-        // Adicionar callback ao reCAPTCHA
-        window.addEventListener('load', function() {
-            // Aguarda o reCAPTCHA carregar e adiciona o callback
-            const checkRecaptcha = setInterval(function() {
-                if (typeof grecaptcha !== 'undefined') {
-                    clearInterval(checkRecaptcha);
-                    
-                    // Reconstrói o reCAPTCHA com callback
-                    const recaptchaElement = document.querySelector('.g-recaptcha');
-                    if (recaptchaElement) {
-                        recaptchaElement.setAttribute('data-callback', 'recaptchaCallback');
-                        
-                        // Observer para mudanças no reCAPTCHA
-                        const observer = new MutationObserver(function(mutations) {
-                            checkFormValidity();
-                        });
-                        
-                        observer.observe(recaptchaElement, {
-                            childList: true,
-                            subtree: true,
-                            attributes: true
-                        });
-                    }
-                }
-            }, 100);
-        });
-        
-        // Manipulador do formulário
-        document.getElementById('verificationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const recaptchaResponse = grecaptcha.getResponse();
-            
-            if (!selectedOption) {
-                alert('Por favor, selecione se você é a pessoa na foto.');
-                return;
-            }
-            
-            if (!recaptchaResponse) {
-                alert('Por favor, complete a verificação reCAPTCHA.');
-                return;
-            }
-            
-            // Mostrar loading
-            const submitBtn = document.getElementById('submitBtn');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const submitText = document.getElementById('submitText');
-            
-            submitBtn.disabled = true;
-            loadingSpinner.classList.add('show');
-            submitText.style.display = 'none';
-            
-            // Preparar mensagem para WhatsApp
-            const response = selectedOption === 'yes' ? 'SIM' : 'NÃO';
-            const message = `🔍 *Verificação de Identidade Concluída*
+        <!-- Identity Confirmation Buttons -->
+        <div class="flex gap-3 mb-6">
+          <button id="btnNo" onclick="selectOption('no')"
+            class="flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent">
+            <i class="fas fa-times mr-2 text-red-500"></i>
+            <span class="text-gray-700">Não, não sou eu</span>
+          </button>
+          <button id="btnYes" onclick="selectOption('yes')"
+            class="flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent">
+            <i class="fas fa-check mr-2 text-green-500"></i>
+            <span class="text-gray-700">Sim, sou eu</span>
+          </button>
+        </div>
 
-📋 *Resultado da Verificação:*
-A pessoa confirmou que ${response === 'SIM' ? 'É' : 'NÃO É'} a mesma da foto.
+        <!-- reCAPTCHA -->
+        <div class="border-t border-gray-100 pt-6">
+          <p class="text-center text-gray-600 mb-4">Complete a verificação de segurança:</p>
+          <div class="flex justify-center">
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              data-callback="recaptchaCallback"></div>
+          </div>
+        </div>
+      </section>
 
-✅ *Resposta:* ${response}
-🛡️ *reCAPTCHA:* Verificado
-📅 *Data/Hora:* ${new Date().toLocaleString('pt-BR')}
+      <!-- Booking & Location Section -->
+      <section id="booking-location" class="bg-white rounded-xl border border-[#d3d3d3] p-6 scheduling-disabled">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-gray-800">Agendar Encontro</h3>
+        </div>
 
-_Esta verificação foi realizada através do sistema de identificação._`;
-            
-            // Simular processamento
-            setTimeout(function() {
-                // Abrir WhatsApp
-                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-                
-                // Resetar formulário após envio
-                setTimeout(function() {
-                    resetForm();
-                }, 1000);
-            }, 2000);
-        });
-        
-        function resetForm() {
-            selectedOption = null;
-            document.getElementById('btnYes').classList.remove('selected');
-            document.getElementById('btnNo').classList.remove('selected');
-            grecaptcha.reset();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const submitText = document.getElementById('submitText');
-            
-            submitBtn.disabled = true;
-            loadingSpinner.classList.remove('show');
-            submitText.style.display = 'inline';
+        <!-- Data e Horário -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="text-center bg-[#FF69B4] text-white py-2 px-4 rounded-lg">
+                <div class="text-xs opacity-90" id="todayWeekday">HOJE</div>
+                <div class="flex items-center gap-1">
+                  <p class="text-lg font-bold" id="todayDay">--</p>
+                  <div class="text-left">
+                    <p class="text-xs font-medium" id="todayMonth">---</p>
+                  </div>
+                </div>
+              </div>
+              <p class="text-gray-600">Escolha o horário:</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-5 gap-2">
+            <button onclick="selectTime('18:30')" id="time-1830"
+              class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
+              <p class="text-base font-medium">18:30</p>
+            </button>
+            <button onclick="selectTime('19:00')" id="time-1900"
+              class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
+              <p class="text-base font-medium">19:00</p>
+            </button>
+            <button onclick="selectTime('19:30')" id="time-1930"
+              class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
+              <p class="text-base font-medium">19:30</p>
+            </button>
+            <button onclick="selectTime('20:00')" id="time-2000"
+              class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
+              <p class="text-base font-medium">20:00</p>
+            </button>
+            <button onclick="selectTime('20:30')" id="time-2030"
+              class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
+              <p class="text-base font-medium">20:30</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Local - Instagram Preview -->
+        <div class="border-t border-gray-100 pt-6">
+          <p class="text-lg font-medium text-gray-800 mb-4">📍 Tratto Cambuí</p>
+
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <!-- Instagram Header -->
+            <div class="flex items-center p-3 border-b border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] p-0.5">
+                  <div class="w-full h-full rounded-full bg-white flex items-center justify-center">
+                    <div
+                      class="w-6 h-6 rounded-full bg-gradient-to-r from-[#833AB4] to-[#F77737] flex items-center justify-center">
+                      <i class="fa-solid fa-utensils text-white text-xs"></i>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p class="font-semibold text-sm">tratto.cambui</p>
+                  <p class="text-xs text-gray-500">Restaurante • Cambuí</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram Image -->
+            <div class="relative">
+              <div
+                class="aspect-square bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-100"></div>
+                <div class="relative z-10 text-center">
+                  <div
+                    class="w-16 h-16 bg-gradient-to-r from-[#833AB4] to-[#F77737] rounded-full flex items-center justify-center mb-3 mx-auto">
+                    <i class="fa-solid fa-utensils text-white text-2xl"></i>
+                  </div>
+                  <p class="text-lg font-bold text-gray-800">Tratto Cambuí</p>
+                  <p class="text-sm text-gray-600">Restaurante Italiano</p>
+                </div>
+
+                <div class="absolute top-3 right-3 bg-black/20 backdrop-blur-sm rounded-full p-2">
+                  <i class="fa-brands fa-instagram text-white text-sm"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram Actions -->
+            <div class="p-3">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-4">
+                  <button class="text-gray-700 hover:text-red-500 transition-colors">
+                    <i class="fa-regular fa-heart text-xl"></i>
+                  </button>
+                  <button class="text-gray-700 hover:text-gray-900 transition-colors">
+                    <i class="fa-regular fa-comment text-xl"></i>
+                  </button>
+                </div>
+                <button class="text-gray-700 hover:text-gray-900 transition-colors">
+                  <i class="fa-regular fa-bookmark text-xl"></i>
+                </button>
+              </div>
+
+              <div class="text-sm">
+                <p class="font-semibold mb-1">245 curtidas</p>
+                <p class="text-gray-800">
+                  <span class="font-semibold">tratto.cambui</span>
+                  Ambiente aconchegante para um encontro especial! 🍝✨
+                  <span class="text-blue-700">#trattorestaurant #cambui #encontro</span>
+                </p>
+                <p class="text-gray-500 text-xs mt-1">Ver todos os 12 comentários</p>
+                <p class="text-gray-400 text-xs mt-1">há 2 horas</p>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-white p-[15px] border-t border-[#d3d3d3]">
+      <button id="submitBtn" onclick="submitForm()" disabled
+        class="w-full bg-gray-400 text-white py-3 rounded-full text-base transition-all duration-200 disabled:cursor-not-allowed">
+        <span class="loading hidden" id="loadingSpinner">
+          <i class="fas fa-spinner fa-spin mr-2"></i>
+        </span>
+        <span id="submitText">
+          <i class="fab fa-whatsapp mr-2"></i>Enviar via WhatsApp
+        </span>
+      </button>
+    </footer>
+  </div>
+  <script>
+    let selectedOption = null;
+    let selectedTime = null;
+    const whatsappNumber = "5516982220820";
+
+    // Configurar data atual
+    function setupToday() {
+      const today = new Date();
+      const weekdays = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+      const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+      document.getElementById('todayWeekday').textContent = weekdays[today.getDay()];
+      document.getElementById('todayDay').textContent = today.getDate();
+      document.getElementById('todayMonth').textContent = months[today.getMonth()];
+    }
+
+    // Configurar na inicialização
+    window.addEventListener('load', setupToday);
+
+    function selectTime(time) {
+      selectedTime = time;
+
+      // Remove seleção anterior
+      const timeButtons = ['time-1830', 'time-1900', 'time-1930', 'time-2000', 'time-2030'];
+      timeButtons.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        button.classList.remove('bg-[#FF69B4]', 'text-white', 'border-[#FF69B4]', 'ring-4', 'ring-pink-200');
+        button.classList.add('bg-gray-100');
+      });
+
+      // Adiciona seleção atual
+      const selectedButton = document.getElementById(`time-${time.replace(':', '')}`);
+      selectedButton.classList.remove('bg-gray-100');
+      selectedButton.classList.add('bg-[#FF69B4]', 'text-white', 'border-[#FF69B4]', 'ring-4', 'ring-pink-200');
+
+      // Verifica se pode habilitar o botão de envio
+      checkFormValidity();
+    }
+
+    function selectOption(option) {
+      selectedOption = option;
+
+      // Reset both buttons to default state
+      const btnYes = document.getElementById('btnYes');
+      const btnNo = document.getElementById('btnNo');
+
+      btnYes.className = "flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+      btnNo.className = "flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+
+      // Apply selection styles
+      if (option === 'yes') {
+        btnYes.className = "flex-1 bg-green-100 border-green-400 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 ring-4 ring-green-200";
+        btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-600"></i><span class="text-green-800 font-semibold">Sim, sou eu</span>';
+      } else {
+        btnNo.className = "flex-1 bg-red-100 border-red-400 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 ring-4 ring-red-200";
+        btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-600"></i><span class="text-red-800 font-semibold">Não, não sou eu</span>';
+      }
+
+      // Restore default content for non-selected button
+      if (option === 'yes') {
+        btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-500"></i><span class="text-gray-700">Não, não sou eu</span>';
+      } else {
+        btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-500"></i><span class="text-gray-700">Sim, sou eu</span>';
+      }
+
+      // Verifica se pode habilitar o botão de envio
+      checkFormValidity();
+    }
+
+    function checkFormValidity() {
+      const recaptchaResponse = grecaptcha.getResponse();
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (selectedOption && selectedTime && recaptchaResponse) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-gray-400');
+        submitBtn.classList.add('bg-[#FF69B4]');
+        submitBtn.classList.remove('cursor-not-allowed');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('bg-gray-400');
+        submitBtn.classList.remove('bg-[#FF69B4]');
+        submitBtn.classList.add('cursor-not-allowed');
+      }
+    }
+
+    // Callback do reCAPTCHA
+    function recaptchaCallback() {
+      // Habilitar seção de agendamento quando reCAPTCHA for completado
+      enableSchedulingSection();
+      checkFormValidity();
+    }
+
+    // Função para habilitar a seção de agendamento
+    function enableSchedulingSection() {
+      const bookingSection = document.getElementById('booking-location');
+      if (bookingSection) {
+        bookingSection.classList.remove('scheduling-disabled');
+      }
+    }
+
+    // Função para desabilitar a seção de agendamento
+    function disableSchedulingSection() {
+      const bookingSection = document.getElementById('booking-location');
+      if (bookingSection) {
+        bookingSection.classList.add('scheduling-disabled');
+      }
+    }
+
+    // Adicionar callback ao reCAPTCHA
+    window.addEventListener('load', function () {
+      // Aguarda o reCAPTCHA carregar e adiciona o callback
+      const checkRecaptcha = setInterval(function () {
+        if (typeof grecaptcha !== 'undefined') {
+          clearInterval(checkRecaptcha);
+
+          // Observer para mudanças no reCAPTCHA
+          const recaptchaElement = document.querySelector('.g-recaptcha');
+          if (recaptchaElement) {
+            const observer = new MutationObserver(function (mutations) {
+              const recaptchaResponse = grecaptcha.getResponse();
+              if (!recaptchaResponse) {
+                // reCAPTCHA foi resetado ou expirou
+                disableSchedulingSection();
+              } else {
+                // reCAPTCHA foi completado
+                enableSchedulingSection();
+              }
+              checkFormValidity();
+            });
+
+            observer.observe(recaptchaElement, {
+              childList: true,
+              subtree: true,
+              attributes: true
+            });
+          }
         }
-        
-        // Adicionar callback global para o reCAPTCHA
-        window.recaptchaCallback = recaptchaCallback;
-    </script>
+      }, 100);
+    });
+
+    // Função de envio do formulário - removida (duplicada)
+
+    function resetForm() {
+      selectedOption = null;
+      selectedTime = null;
+
+      // Reset identity buttons
+      const btnYes = document.getElementById('btnYes');
+      const btnNo = document.getElementById('btnNo');
+
+      btnYes.className = "flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+      btnNo.className = "flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+
+      btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-500"></i><span class="text-gray-700">Sim, sou eu</span>';
+      btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-500"></i><span class="text-gray-700">Não, não sou eu</span>';
+
+      // Reset time buttons
+      const timeButtons = ['time-1830', 'time-1900', 'time-1930', 'time-2000', 'time-2030'];
+      timeButtons.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        button.classList.remove('bg-[#FF69B4]', 'text-white', 'border-[#FF69B4]', 'ring-4', 'ring-pink-200');
+        button.classList.add('bg-gray-100');
+      });
+
+      // Reset reCAPTCHA
+      grecaptcha.reset();
+
+      // Desabilitar seção de agendamento
+      disableSchedulingSection();
+
+      // Reset submit button
+      const submitBtn = document.getElementById('submitBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const submitText = document.getElementById('submitText');
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('bg-gray-400');
+      submitBtn.classList.remove('bg-[#FF69B4]');
+      loadingSpinner.classList.add('hidden');
+      loadingSpinner.classList.remove('inline-block');
+      submitText.style.display = 'inline';
+    }
+
+    // Adicionar callback global para o reCAPTCHA
+    window.recaptchaCallback = recaptchaCallback;
+
+    // Funções para integração
+    const googleLocationUrl = "https://g.co/kgs/J9FRpt9";
+
+    // Adicionar local à mensagem principal do WhatsApp
+    function submitForm() {
+      const recaptchaResponse = grecaptcha.getResponse();
+
+      if (!selectedOption) {
+        alert('Por favor, selecione se você é a pessoa na foto.');
+        return;
+      }
+
+      if (!selectedTime) {
+        alert('Por favor, selecione um horário para o encontro.');
+        return;
+      }
+
+      if (!recaptchaResponse) {
+        alert('Por favor, complete a verificação reCAPTCHA.');
+        return;
+      }
+
+      // Mostrar loading
+      const submitBtn = document.getElementById('submitBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const submitText = document.getElementById('submitText');
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('bg-gray-400');
+      submitBtn.classList.remove('bg-[#FF69B4]');
+      loadingSpinner.classList.remove('hidden');
+      loadingSpinner.classList.add('inline-block');
+      submitText.style.display = 'none';
+
+      // Preparar mensagem para WhatsApp com localização
+      const response = selectedOption === 'yes' ? 'SIM' : 'NÃO';
+      const today = new Date();
+      const todayFormatted = today.toLocaleDateString('pt-BR');
+
+      const message = selectedOption === 'yes' ?
+        `Oi... 😏 Sim, sou eu mesmo da foto.
+
+Confirmei que sou real e não um robô. Que tal nos encontrarmos hoje às *${selectedTime}* no Tratto Cambuí? 
+
+Prometo que vai valer a pena... 😉
+
+📍 ${googleLocationUrl}` :
+        `Oi... Na verdade não sou eu da foto.
+
+Não posso confirmar o encontro. Desculpa.`;
+
+      // Simular processamento
+      setTimeout(function () {
+        // Abrir WhatsApp
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+
+        // Resetar formulário após envio
+        setTimeout(function () {
+          resetForm();
+        }, 1000);
+      }, 2000);
+    }
+  </script>
+
 </body>
+
 </html>
