@@ -659,7 +659,7 @@
 
         <!-- Identity Confirmation Buttons -->
         <div class="flex flex-col gap-3 mb-6">
-          <button id="btnNo" onclick="selectOption('no')"
+          <button type="button" id="btnNo" onclick="selectOption('no')"
             class="w-full bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
             <div class="flex items-center justify-center">
               <div
@@ -669,7 +669,7 @@
               <span class="text-gray-700 group-hover:text-red-700">Não sou eu</span>
             </div>
           </button>
-          <button id="btnYes" onclick="selectOption('yes')"
+          <button type="button" id="btnYes" onclick="selectOption('yes')"
             class="w-full bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
             <div class="flex items-center justify-center">
               <div
@@ -715,19 +715,19 @@
           </div>
 
           <div class="grid grid-cols-4 gap-2">
-            <button onclick="selectTime('18:30')" id="time-1830"
+            <button type="button" onclick="selectTime('18:30')" id="time-1830"
               class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
               <p class="text-base font-medium">18:30</p>
             </button>
-            <button onclick="selectTime('19:00')" id="time-1900"
+            <button type="button" onclick="selectTime('19:00')" id="time-1900"
               class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
               <p class="text-base font-medium">19:00</p>
             </button>
-            <button onclick="selectTime('19:30')" id="time-1930"
+            <button type="button" onclick="selectTime('19:30')" id="time-1930"
               class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
               <p class="text-base font-medium">19:30</p>
             </button>
-            <button onclick="selectTime('20:00')" id="time-2000"
+            <button type="button" onclick="selectTime('20:00')" id="time-2000"
               class="bg-gray-100 hover:bg-[#FF69B4] hover:text-white py-3 rounded-lg text-center transition-all duration-200 border-2 border-transparent hover:border-[#FF69B4]">
               <p class="text-base font-medium">20:00</p>
             </button>
@@ -753,7 +753,7 @@
 
     <!-- Footer -->
     <footer id="footer" class="bg-white p-[15px] border-t border-[#d3d3d3]">
-      <button id="submitBtn" onclick="submitForm()" disabled
+      <button type="button" id="submitBtn" onclick="submitForm()" disabled
         class="w-full bg-gray-400 text-white py-3 rounded-full text-base transition-all duration-200 disabled:cursor-not-allowed">
         <span class="loading hidden" id="loadingSpinner">
           <i class="fas fa-spinner fa-spin mr-2"></i>
@@ -785,7 +785,6 @@
 
     function selectTime(time) {
       selectedTime = time;
-      console.log('Horário selecionado:', time);
 
       // Remove seleção anterior
       const timeButtons = ['time-1830', 'time-1900', 'time-1930', 'time-2000', 'time-2030'];
@@ -806,7 +805,6 @@
 
     function selectOption(option) {
       selectedOption = option;
-      console.log('Opção selecionada:', option);
 
       // Reset both buttons to default state
       const btnYes = document.getElementById('btnYes');
@@ -861,13 +859,6 @@
     function checkFormValidity() {
       const recaptchaResponse = grecaptcha.getResponse();
       const submitBtn = document.getElementById('submitBtn');
-
-      console.log('Verificando formulário:', {
-        selectedOption: selectedOption,
-        selectedTime: selectedTime,
-        recaptchaResponse: recaptchaResponse,
-        allValid: selectedOption && selectedTime && recaptchaResponse
-      });
 
       if (selectedOption && selectedTime && recaptchaResponse) {
         submitBtn.disabled = false;
