@@ -658,9 +658,9 @@
         </div>
 
         <!-- Identity Confirmation Buttons -->
-        <div class="flex gap-3 mb-6">
+        <div class="flex flex-col gap-3 mb-6">
           <button id="btnNo" onclick="selectOption('no')"
-            class="flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
+            class="w-full bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
             <div class="flex items-center justify-center">
               <div
                 class="w-6 h-6 rounded-full bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-2 transition-colors duration-300">
@@ -670,7 +670,7 @@
             </div>
           </button>
           <button id="btnYes" onclick="selectOption('yes')"
-            class="flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
+            class="w-full bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
             <div class="flex items-center justify-center">
               <div
                 class="w-6 h-6 rounded-full bg-green-100 group-hover:bg-green-200 flex items-center justify-center mr-2 transition-colors duration-300">
@@ -736,7 +736,11 @@
 
                 <!-- Local - Imagem do Instagram -->
         <div class="border-t border-gray-100 pt-6">
-          <p class="text-lg font-medium text-gray-800 mb-4">📍 Tratto Cambuí</p>
+          <p class="text-lg font-medium mb-4">
+            <a href="https://g.co/kgs/J9FRpt9" target="_blank" class="text-gray-800 hover:text-[#FF69B4] transition-colors duration-200 no-underline">
+              📍 Tratto Cambuí
+            </a>
+          </p>
           
           <!-- Instagram Image -->
           <div class="flex justify-center">
@@ -781,6 +785,7 @@
 
     function selectTime(time) {
       selectedTime = time;
+      console.log('Horário selecionado:', time);
 
       // Remove seleção anterior
       const timeButtons = ['time-1830', 'time-1900', 'time-1930', 'time-2000', 'time-2030'];
@@ -801,20 +806,21 @@
 
     function selectOption(option) {
       selectedOption = option;
+      console.log('Opção selecionada:', option);
 
       // Reset both buttons to default state
       const btnYes = document.getElementById('btnYes');
       const btnNo = document.getElementById('btnNo');
 
-      const defaultClasses = "flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
-      const defaultNoClasses = "flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      const defaultClasses = "w-full bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      const defaultNoClasses = "w-full bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
 
       btnYes.className = defaultClasses;
       btnNo.className = defaultNoClasses;
 
       // Apply selection styles
       if (option === 'yes') {
-        btnYes.className = "flex-1 bg-green-50 border border-green-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-green-100 group";
+        btnYes.className = "w-full bg-green-50 border border-green-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-green-100 group";
         btnYes.innerHTML = `<div class="flex items-center justify-center">
           <div class="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center mr-2">
             <i class="fas fa-check text-green-700 text-xs"></i>
@@ -822,7 +828,7 @@
           <span class="text-green-800 font-semibold">Sim, sou eu</span>
         </div>`;
       } else {
-        btnNo.className = "flex-1 bg-red-50 border border-red-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-red-100 group";
+        btnNo.className = "w-full bg-red-50 border border-red-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-red-100 group";
         btnNo.innerHTML = `<div class="flex items-center justify-center">
           <div class="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center mr-2">
             <i class="fas fa-times text-red-700 text-xs"></i>
@@ -855,6 +861,13 @@
     function checkFormValidity() {
       const recaptchaResponse = grecaptcha.getResponse();
       const submitBtn = document.getElementById('submitBtn');
+
+      console.log('Verificando formulário:', {
+        selectedOption: selectedOption,
+        selectedTime: selectedTime,
+        recaptchaResponse: recaptchaResponse,
+        allValid: selectedOption && selectedTime && recaptchaResponse
+      });
 
       if (selectedOption && selectedTime && recaptchaResponse) {
         submitBtn.disabled = false;
@@ -934,8 +947,8 @@
       const btnYes = document.getElementById('btnYes');
       const btnNo = document.getElementById('btnNo');
 
-      btnYes.className = "flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
-      btnNo.className = "flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      btnYes.className = "w-full bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      btnNo.className = "w-full bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
 
       btnYes.innerHTML = `<div class="flex items-center justify-center">
         <div class="w-6 h-6 rounded-full bg-green-100 group-hover:bg-green-200 flex items-center justify-center mr-2 transition-colors duration-300">
@@ -1020,7 +1033,7 @@
       const todayFormatted = today.toLocaleDateString('pt-BR');
 
       const message = selectedOption === 'yes' ?
-        `Oi... Eu sou o gatinho da foto 😏 e confirmei que NÃO SOU UMA IA.
+        `Oi... Eu sou o gatinho da foto 😏 e confirmei que NÃO SOU UMA IA!!!! 🤖
         
 Que tal nos encontrarmos hoje às *${selectedTime}* no Tratto Cambuí? 
 
