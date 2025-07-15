@@ -656,8 +656,8 @@
 <body class="h-full text-base-content">
   <div id="date-scheduler" class="flex flex-col min-h-[700px] bg-white">
     <!-- Header -->
-    <header id="header" class="bg-white py-4 px-[15px] border-b border-[#d3d3d3] flex justify-center items-center">
-      <h1 class="text-2xl">Agendar Encontro</h1>
+    <header id="header" class="bg-gradient-to-r from-[#FF69B4] via-[#FF1493] to-[#DC143C] py-6 px-[15px] shadow-lg flex justify-center items-center">
+      <h1 class="text-2xl font-bold text-white drop-shadow-md">🔥 Agendar Encontro 🔥</h1>
     </header>
 
     <!-- Main Content -->
@@ -671,20 +671,28 @@
               class="w-full h-full object-cover" id="personImage">
           </div>
           <h2 class="text-2xl font-semibold text-gray-800 mb-2" bodyVerificação de Identidade</h2>
-            <p class="text-lg text-gray-600 mb-6">Esta pessoa na foto é você?</p>
+            <p class="text-lg text-gray-600 mb-6">Este gato na foto é você?</p>
         </div>
 
         <!-- Identity Confirmation Buttons -->
         <div class="flex gap-3 mb-6">
           <button id="btnNo" onclick="selectOption('no')"
-            class="flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent">
-            <i class="fas fa-times mr-2 text-red-500"></i>
-            <span class="text-gray-700">Não, não sou eu</span>
+            class="flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
+            <div class="flex items-center justify-center">
+              <div class="w-6 h-6 rounded-full bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-2 transition-colors duration-300">
+                <i class="fas fa-times text-red-500 text-xs"></i>
+              </div>
+              <span class="text-gray-700 group-hover:text-red-700">Não sou eu</span>
+            </div>
           </button>
           <button id="btnYes" onclick="selectOption('yes')"
-            class="flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent">
-            <i class="fas fa-check mr-2 text-green-500"></i>
-            <span class="text-gray-700">Sim, sou eu</span>
+            class="flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group">
+            <div class="flex items-center justify-center">
+              <div class="w-6 h-6 rounded-full bg-green-100 group-hover:bg-green-200 flex items-center justify-center mr-2 transition-colors duration-300">
+                <i class="fas fa-check text-green-500 text-xs"></i>
+              </div>
+              <span class="text-gray-700 group-hover:text-green-700">Sim, sou eu</span>
+            </div>
           </button>
         </div>
 
@@ -881,23 +889,46 @@
       const btnYes = document.getElementById('btnYes');
       const btnNo = document.getElementById('btnNo');
 
-      btnYes.className = "flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
-      btnNo.className = "flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+      const defaultClasses = "flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      const defaultNoClasses = "flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+
+      btnYes.className = defaultClasses;
+      btnNo.className = defaultNoClasses;
 
       // Apply selection styles
       if (option === 'yes') {
-        btnYes.className = "flex-1 bg-green-100 border-green-400 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 ring-4 ring-green-200";
-        btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-600"></i><span class="text-green-800 font-semibold">Sim, sou eu</span>';
+        btnYes.className = "flex-1 bg-green-50 border border-green-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-green-100 group";
+        btnYes.innerHTML = `<div class="flex items-center justify-center">
+          <div class="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center mr-2">
+            <i class="fas fa-check text-green-700 text-xs"></i>
+          </div>
+          <span class="text-green-800 font-semibold">Sim, sou eu</span>
+        </div>`;
       } else {
-        btnNo.className = "flex-1 bg-red-100 border-red-400 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 ring-4 ring-red-200";
-        btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-600"></i><span class="text-red-800 font-semibold">Não, não sou eu</span>';
+        btnNo.className = "flex-1 bg-red-50 border border-red-400 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-md ring-2 ring-red-100 group";
+        btnNo.innerHTML = `<div class="flex items-center justify-center">
+          <div class="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center mr-2">
+            <i class="fas fa-times text-red-700 text-xs"></i>
+          </div>
+          <span class="text-red-800 font-semibold">Não sou eu</span>
+        </div>`;
       }
 
       // Restore default content for non-selected button
       if (option === 'yes') {
-        btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-500"></i><span class="text-gray-700">Não, não sou eu</span>';
+        btnNo.innerHTML = `<div class="flex items-center justify-center">
+          <div class="w-6 h-6 rounded-full bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-2 transition-colors duration-300">
+            <i class="fas fa-times text-red-500 text-xs"></i>
+          </div>
+          <span class="text-gray-700 group-hover:text-red-700">Não sou eu</span>
+        </div>`;
       } else {
-        btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-500"></i><span class="text-gray-700">Sim, sou eu</span>';
+        btnYes.innerHTML = `<div class="flex items-center justify-center">
+          <div class="w-6 h-6 rounded-full bg-green-100 group-hover:bg-green-200 flex items-center justify-center mr-2 transition-colors duration-300">
+            <i class="fas fa-check text-green-500 text-xs"></i>
+          </div>
+          <span class="text-gray-700 group-hover:text-green-700">Sim, sou eu</span>
+        </div>`;
       }
 
       // Verifica se pode habilitar o botão de envio
@@ -986,11 +1017,21 @@
       const btnYes = document.getElementById('btnYes');
       const btnNo = document.getElementById('btnNo');
 
-      btnYes.className = "flex-1 bg-gray-100 hover:bg-green-50 hover:border-green-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
-      btnNo.className = "flex-1 bg-gray-100 hover:bg-red-50 hover:border-red-300 py-4 rounded-xl text-base font-medium transition-all duration-200 border-2 border-transparent";
+      btnYes.className = "flex-1 bg-white border border-gray-200 hover:border-green-400 hover:bg-green-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
+      btnNo.className = "flex-1 bg-white border border-gray-200 hover:border-red-400 hover:bg-red-50 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md group";
 
-      btnYes.innerHTML = '<i class="fas fa-check mr-2 text-green-500"></i><span class="text-gray-700">Sim, sou eu</span>';
-      btnNo.innerHTML = '<i class="fas fa-times mr-2 text-red-500"></i><span class="text-gray-700">Não, não sou eu</span>';
+      btnYes.innerHTML = `<div class="flex items-center justify-center">
+        <div class="w-6 h-6 rounded-full bg-green-100 group-hover:bg-green-200 flex items-center justify-center mr-2 transition-colors duration-300">
+          <i class="fas fa-check text-green-500 text-xs"></i>
+        </div>
+        <span class="text-gray-700 group-hover:text-green-700">Sim, sou eu</span>
+      </div>`;
+      btnNo.innerHTML = `<div class="flex items-center justify-center">
+        <div class="w-6 h-6 rounded-full bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-2 transition-colors duration-300">
+          <i class="fas fa-times text-red-500 text-xs"></i>
+        </div>
+        <span class="text-gray-700 group-hover:text-red-700">Não, não sou eu</span>
+      </div>`;
 
       // Reset time buttons
       const timeButtons = ['time-1830', 'time-1900', 'time-1930', 'time-2000', 'time-2030'];
@@ -1062,11 +1103,9 @@
       const todayFormatted = today.toLocaleDateString('pt-BR');
 
       const message = selectedOption === 'yes' ?
-        `Oi... 😏 Sim, sou eu mesmo da foto.
-
-Confirmei que sou real e não um robô. Que tal nos encontrarmos hoje às *${selectedTime}* no Tratto Cambuí? 
-
-Prometo que vai valer a pena... 😉
+        `Oi... Eu sou o gatinho da foto 😏 e confirmei que NÃO SOU UMA IA.
+        
+Que tal nos encontrarmos hoje às *${selectedTime}* no Tratto Cambuí? 
 
 📍 ${googleLocationUrl}` :
         `Oi... Na verdade não sou eu da foto.
