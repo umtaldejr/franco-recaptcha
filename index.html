@@ -753,8 +753,8 @@
 
     <!-- Footer -->
     <footer id="footer" class="bg-white p-[15px] border-t border-[#d3d3d3]">
-      <button type="button" id="submitBtn" onclick="submitForm()" disabled
-        class="w-full bg-gray-400 text-white py-3 rounded-full text-base transition-all duration-200 disabled:cursor-not-allowed">
+      <button type="button" id="submitBtn" onclick="submitForm()"
+        class="w-full bg-[#FF69B4] text-white py-3 rounded-full text-base transition-all duration-200">
         <span class="loading hidden" id="loadingSpinner">
           <i class="fas fa-spinner fa-spin mr-2"></i>
         </span>
@@ -798,9 +798,6 @@
       const selectedButton = document.getElementById(`time-${time.replace(':', '')}`);
       selectedButton.classList.remove('bg-gray-100');
       selectedButton.classList.add('bg-[#FF69B4]', 'text-white', 'border-[#FF69B4]', 'ring-4', 'ring-pink-200');
-
-      // Verifica se pode habilitar o botão de envio
-      checkFormValidity();
     }
 
     function selectOption(option) {
@@ -851,33 +848,14 @@
           <span class="text-gray-700 group-hover:text-green-700">Sim, sou eu</span>
         </div>`;
       }
-
-      // Verifica se pode habilitar o botão de envio
-      checkFormValidity();
     }
 
-    function checkFormValidity() {
-      const recaptchaResponse = grecaptcha.getResponse();
-      const submitBtn = document.getElementById('submitBtn');
 
-      if (selectedOption && selectedTime && recaptchaResponse) {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('bg-gray-400');
-        submitBtn.classList.add('bg-[#FF69B4]');
-        submitBtn.classList.remove('cursor-not-allowed');
-      } else {
-        submitBtn.disabled = true;
-        submitBtn.classList.add('bg-gray-400');
-        submitBtn.classList.remove('bg-[#FF69B4]');
-        submitBtn.classList.add('cursor-not-allowed');
-      }
-    }
 
     // Callback do reCAPTCHA
     function recaptchaCallback() {
       // Habilitar seção de agendamento quando reCAPTCHA for completado
       enableSchedulingSection();
-      checkFormValidity();
     }
 
     // Função para habilitar a seção de agendamento
@@ -915,7 +893,6 @@
                 // reCAPTCHA foi completado
                 enableSchedulingSection();
               }
-              checkFormValidity();
             });
 
             observer.observe(recaptchaElement, {
