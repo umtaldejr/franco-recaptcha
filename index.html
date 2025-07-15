@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Identidade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .verification-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 500px;
+        }
+        
+        .person-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 2rem;
+            display: block;
+        }
+        
+        .question-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-option {
+            margin: 0.5rem;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            min-width: 120px;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .btn-yes:hover {
+            background: linear-gradient(45deg, #20c997, #28a745);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-no {
+            background: linear-gradient(45deg, #dc3545, #e83e8c);
+            color: white;
+        }
+        
+        .btn-no:hover {
+            background: linear-gradient(45deg, #e83e8c, #dc3545);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+        
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #007bff, #6610f2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(45deg, #6610f2, #007bff);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .selected {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+        
+        .loading {
+            display: none;
+        }
+        
+        .loading.show {
+            display: inline-block;
+        }
+        
+        @media (max-width: 768px) {
+            .verification-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .person-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .btn-option {
+                padding: 0.6rem 1.5rem;
+                margin: 0.3rem;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="verification-card">
+            <h1 class="header-title">
+                <i class="fas fa-user-check"></i>
+                Verificação de Identidade
+            </h1>
+            
+            <!-- Foto da pessoa -->
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" 
+                 alt="Pessoa para verificação" 
+                 class="person-image" 
+                 id="personImage">
+            
+            <!-- Formulário -->
+            <form id="verificationForm">
+                <div class="question-section">
+                    <div class="question-text">
+                        Esta pessoa na foto é você?
+                    </div>
+                    
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <button type="button" class="btn btn-option btn-yes" id="btnYes" onclick="selectOption('yes')">
+                            <i class="fas fa-check"></i> Sim, sou eu
+                        </button>
+                        <button type="button" class="btn btn-option btn-no" id="btnNo" onclick="selectOption('no')">
+                            <i class="fas fa-times"></i> Não, não sou eu
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- reCAPTCHA -->
+                <div class="recaptcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+                </div>
+                
+                <!-- Botão de envio -->
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    <span class="loading" id="loadingSpinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                    <span id="submitText">
+                        <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedOption = null;
+        const whatsappNumber = "5516982220820";
+        
+        function selectOption(option) {
+            selectedOption = option;
+            
+            // Remove seleção anterior
+            document.getElementById('btnYes').classList.remove('selected');
+            document.getElementById('btnNo').classList.remove('selected');
+            
+            // Adiciona seleção atual
+            if (option === 'yes') {
+                document.getElementById('btnYes').classList.add('selected');
+            } else {
+                document.getElementById('btnNo').classList.add('selected');
+            }
+            
+            // Verifica se pode habilitar o botão de envio
+            checkFormValidity();
+        }
+        
+        function checkFormValidity() {
+            const recaptchaResponse = grecaptcha.getResponse();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (selectedOption && recaptchaResponse) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+        
+        // Callback do reCAPTCHA
+        function recaptchaCallback() {
+            checkFormValidity();
+        }
+        
+        // Adicionar callback ao reCAPTCHA
+        window.addEventListener('load', function() {
+            // Aguarda o reCAPTCHA carregar e adiciona o callback
+            const checkRecaptcha = setInterval(function() {
+                if (typeof grecaptcha !== 'undefined') {
+                    clearInterval(checkRecaptcha);
+                    
+                    // Reconstrói o reCAPTCHA com callback
+                    const recaptchaElement = document.querySelector('.g-recaptcha');
+                    if (recaptchaElement) {
+                        recaptchaElement.setAttribute('data-callback', 'recaptchaCallback');
+                        
+                        // Observer para mudanças no reCAPTCHA
+                        const observer = new MutationObserver(function(mutations) {
+                            checkFormValidity();
+                        });
+                        
+                        observer.observe(recaptchaElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true
+                        });
+                    }
+                }
+            }, 100);
+        });
+        
+        // Manipulador do formulário
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const recaptchaResponse = grecaptcha.getResponse();
+            
+            if (!selectedOption) {
+                alert('Por favor, selecione se você é a pessoa na foto.');
+                return;
+            }
+            
+            if (!recaptchaResponse) {
+                alert('Por favor, complete a verificação reCAPTCHA.');
+                return;
+            }
+            
+            // Mostrar loading
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitText = document.getElementById('submitText');
+            
+            submitBtn.disabled = true;
+            loadingSpinner.classList.add('show');
+            submitText.style.display = 'none';
+            
+            // Preparar mensagem para WhatsApp
+            const response = selectedOption === 'yes' ? 'SIM' : 'NÃO';
+            const message = `🔍 *Verificação de Identidade Concluída*
+
+📋 *Resultado da Verificação:*
+A pessoa confirmou que ${response === 'SIM' ? 'É' : 'NÃO É'} a mesma da foto.
+
+✅ *Resposta:* ${response}
+🛡️ *reCAPTCHA:* Verificado
+📅 *Data/Hora:* ${new Date().toLocaleString('pt-BR')}
+
+_Esta verificação foi realizada através do sistema de identificação._`;
+            
+            // Simular processamento
+            setTimeout(function() {
+                // Abrir WhatsApp
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // Resetar formulário após envio
+                setTimeout(function() {
+                    resetForm();
+                }, 1000);
+            }, 2000);
+        });
+        
+        function resetForm() {
+            selectedOption = null;
+            document.getElementById('btnYes').classList.remove('selected');
+            document.getElementById('btnNo').classList.remove('selected');
+            grecaptcha.reset();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitText = document.getElementById('submitText');
+            
+            submitBtn.disabled = true;
+            loadingSpinner.classList.remove('show');
+            submitText.style.display = 'inline';
+        }
+        
+        // Adicionar callback global para o reCAPTCHA
+        window.recaptchaCallback = recaptchaCallback;
+    </script>
+</body>
+</html>
